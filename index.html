@@ -1,163 +1,99 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium WiFi Access</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23FFD700'/><stop offset='1' stop-color='%23FFA500'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='8'/><path d='M50 20 Q70 35 50 50 Q30 65 50 80' fill='none' stroke='url(%23g)' stroke-width='6' stroke-linecap='round'/></svg>">
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #000 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.shine-bg {
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);
-  animation: rotate 20s linear infinite;
-}
-
-@keyframes rotate {
- 0% { transform: rotate(0deg); }
- 100% { transform: rotate(360deg); }
-}
-
-.container {
-  background: rgba(0,0,0,0.8);
-  border: 2px solid #FFD700;
-  border-radius: 20px;
-  padding: 40px 30px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 0 40px rgba(255,215,0,0.4), inset 0 0 20px rgba(255,215,0,0.1);
-  position: relative;
-  z-index: 1;
-  animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
- 0% { box-shadow: 0 0 40px rgba(255,215,0,0.4), inset 0 0 20px rgba(255,215,0,0.1); }
- 100% { box-shadow: 0 0 60px rgba(255,215,0,0.7), inset 0 0 30px rgba(255,215,0,0.2); }
-}
-
-.icon {
-  font-size: 60px;
-  margin-bottom: 20px;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
- 0%, 100% { transform: scale(1); }
- 50% { transform: scale(1.1); }
-}
-
-h1 {
-  color: #FFD700;
-  font-size: 28px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px rgba(255,215,0,0.8);
-}
-
-p {
-  color: #ccc;
-  margin-bottom: 30px;
-  font-size: 14px;
-}
-
-input {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  background: #111;
-  border: 2px solid #333;
-  border-radius: 10px;
-  color: #FFD700;
-  font-size: 16px;
-  outline: none;
-  transition: 0.3s;
-}
-
-input:focus {
-  border-color: #FFD700;
-  box-shadow: 0 0 15px rgba(255,215,0,0.5);
-}
-
-input::placeholder {
-  color: #666;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
-  background-size: 200% 100%;
-  border: none;
-  border-radius: 10px;
-  color: #000;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.4s;
-  animation: shine 3s linear infinite;
-}
-
-@keyframes shine {
- 0% { background-position: 0% 50%; }
- 100% { background-position: 200% 50%; }
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255,215,0,0.8);
-}
-
-.footer {
-  margin-top: 20px;
-  color: #555;
-  font-size: 12px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiFi Login</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:#f2f2f2;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+    .box{width:100%;max-width:400px;background:white;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden}
+    .top{background:#1e40af;color:white;padding:30px;text-align:center}
+    .top .logo{width:70px;height:70px;background:white;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:#1e40af;font-weight:bold;font-size:24px}
+    .top h1{font-size:22px;margin-bottom:5px}
+    .top p{font-size:13px;opacity:0.9}
+    .plans{padding:25px}
+    .plans h2{font-size:16px;color:#333;margin-bottom:15px}
+    .plan{border:1px solid #ddd;border-radius:8px;padding:15px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+    .plan:hover{border-color:#1e40af}
+    .plan b{display:block;font-size:15px;color:#222}
+    .plan small{color:#666;font-size:12px}
+    .btn{background:#1e40af;color:white;border:none;padding:8px 16px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
+    .btn:hover{background:#1e3a8a}
+    .voucher{margin-top:25px;padding-top:20px;border-top:1px solid #eee}
+    .voucher p{text-align:center;color:#888;font-size:12px;margin-bottom:10px}
+    .voucher input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;margin-bottom:10px;font-size:14px}
+    .connect{width:100%;background:#1e40af;color:white;border:none;padding:14px;border-radius:8px;font-weight:bold;font-size:15px;cursor:pointer}
+    .connect:hover{background:#1e3a8a}
+  </style>
 </head>
 <body>
-<div class="shine-bg"></div>
-<div class="container">
-  <div class="icon">📶</div>
-  <h1>PREMIUM WIFI</h1>
-  <p>Weka nenosiri kupata ufikiaji wa haraka</p>
-  
-  <input type="text" placeholder="Jina lako" id="name">
-  <input type="password" placeholder="Weka nenosiri" id="password">
-  <button onclick="connect()">UNGANISHA SASA</button>
-  
-  <div class="footer">© 2026 Golden Access</div>
-</div>
+  <div class="box">
+    <div class="top">
+      <div class="logo">MY</div>
+      <h1>Majestic WiFi</h1>
+      <p>Fast Internet Access</p>
+    </div>
 
-<script>
-function connect() {
-  let name = document.getElementById('name').value;
-  let pass = document.getElementById('password').value;
-  
-  if(name === '' || pass === 'JUMJUM') {
-    alert('please fill all the details!');
-    return;
-  }
-  
-  alert('welcome' + name + '! Connected ✅');
-}
-</script>
+    <div class="plans">
+      <h2>Chagua Package</h2>
+      
+      <div class="plan">
+        <div>
+          <b>1 Hour</b>
+          <small>Speed: 5Mbps | Muda: Saa 1</small>
+        </div>
+        <button class="btn" onclick="lipa(50,'1Hour')">KES 50</button>
+      </div>
+
+      <div class="plan">
+        <div>
+          <b>1 Day</b>
+          <small>Speed: 10Mbps | Muda: Siku 1</small>
+        </div>
+        <button class="btn" onclick="lipa(100,'1Day')">KES 100</button>
+      </div>
+
+      <div class="plan">
+        <div>
+          <b>1 Week</b>
+          <small>Speed: 20Mbps | Muda: Wiki 1</small>
+        </div>
+        <button class="btn" onclick="lipa(500,'1Week')">KES 500</button>
+      </div>
+
+      <div class="plan">
+        <div>
+          <b>1 Month</b>
+          <small>Speed: 50Mbps | Muda: Mwezi 1</small>
+        </div>
+        <button class="btn" onclick="lipa(1500,'1Month')">KES 1500</button>
+      </div>
+
+      <div class="voucher">
+        <p>AU TUMIA VOUCHER</p>
+        <input type="text" placeholder="Weka code ya voucher">
+        <input type="password" placeholder="Password">
+        <button class="connect" onclick="ingia()">Connect Sasa</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function lipa(pesa,package){
+      let namba = prompt("Weka namba ya M-Pesa: 07xxxxxxxx");
+      if(namba && namba.length==10){
+        alert("Tuma KES "+pesa+" kwa "+namba+" - Package: "+package);
+        // Hapa ndio unaweka code yako ya M-Pesa API
+      }else{
+        alert("Namba si sahihi!");
+      }
+    }
+    
+    function ingia(){
+      alert("Ingiza code sawa ndio u-connect");
+      // Hapa ndio code ya ku-check voucher kwa database yako
+    }
+  </script>
 </body>
-  </html>
+</html>
