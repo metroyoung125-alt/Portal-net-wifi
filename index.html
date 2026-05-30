@@ -1,99 +1,432 @@
 <!DOCTYPE html>
-<html>
+<html lang="sw">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WiFi Login</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-    body{background:#f2f2f2;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
-    .box{width:100%;max-width:400px;background:white;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden}
-    .top{background:#1e40af;color:white;padding:30px;text-align:center}
-    .top .logo{width:70px;height:70px;background:white;border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:#1e40af;font-weight:bold;font-size:24px}
-    .top h1{font-size:22px;margin-bottom:5px}
-    .top p{font-size:13px;opacity:0.9}
-    .plans{padding:25px}
-    .plans h2{font-size:16px;color:#333;margin-bottom:15px}
-    .plan{border:1px solid #ddd;border-radius:8px;padding:15px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-    .plan:hover{border-color:#1e40af}
-    .plan b{display:block;font-size:15px;color:#222}
-    .plan small{color:#666;font-size:12px}
-    .btn{background:#1e40af;color:white;border:none;padding:8px 16px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:13px}
-    .btn:hover{background:#1e3a8a}
-    .voucher{margin-top:25px;padding-top:20px;border-top:1px solid #eee}
-    .voucher p{text-align:center;color:#888;font-size:12px;margin-bottom:10px}
-    .voucher input{width:100%;padding:12px;border:1px solid #ccc;border-radius:6px;margin-bottom:10px;font-size:14px}
-    .connect{width:100%;background:#1e40af;color:white;border:none;padding:14px;border-radius:8px;font-weight:bold;font-size:15px;cursor:pointer}
-    .connect:hover{background:#1e3a8a}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golden WiFi - Pay & Connect</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='none' stroke='%23FFD700' stroke-width='8'/><path d='M50 25 Q70 40 50 55 Q30 70 50 85' fill='none' stroke='%23FFD700' stroke-width='6' stroke-linecap='round'/></svg>">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #000 0%, #001f3f 50%, #000 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #fff;
+}
+
+.shine {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+  animation: rotate 25s linear infinite;
+}
+
+@keyframes rotate {
+ 100% { transform: rotate(360deg); }
+}
+
+.box {
+  background: rgba(0,0,0,0.85);
+  border: 3px solid #FFD700;
+  border-radius: 25px;
+  padding: 35px 25px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 0 50px rgba(0,100,255,0.6), 0 0 30px rgba(255,215,0,0.4);
+  animation: glow 2.5s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes glow {
+ 0% { box-shadow: 0 0 40px rgba(0,100,255,0.5), 0 0 20px rgba(255,215,0,0.3); }
+ 100% { box-shadow: 0 0 70px rgba(0,150,255,0.8), 0 0 40px rgba(255,215,0,0.6); }
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.logo h1 {
+  color: #FFD700;
+  font-size: 32px;
+  text-shadow: 0 0 15px rgba(255,215,0,0.9);
+  margin-bottom: 5px;
+}
+
+.logo p {
+  color: #4da6ff;
+  font-size: 13px;
+}
+
+.status {
+  background: #001f3f;
+  border: 2px solid #FFD700;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.status .icon {
+  font-size: 45px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+ 0%, 100% { transform: scale(1); }
+ 50% { transform: scale(1.1); }
+}
+
+.status h3 {
+  color: #FFD700;
+  margin-top: 8px;
+}
+
+.status small {
+  color: #ccc;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+  animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.package-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.package {
+  background: linear-gradient(145deg, #001f3f, #000);
+  border: 2px solid #4da6ff;
+  border-radius: 15px;
+  padding: 18px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.package:hover {
+  border-color: #FFD700;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(255,215,0,0.5);
+}
+
+.package.gold {
+  border-color: #FFD700;
+  background: linear-gradient(145deg, #1a1a00, #000);
+}
+
+.package h4 {
+  color: #FFD700;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.package .price {
+  color: #4da6ff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.package .time {
+  color: #aaa;
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #111;
+  border: 2px solid #333;
+  border-radius: 10px;
+  color: #FFD700;
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #4da6ff;
+  box-shadow: 0 0 12px rgba(77,166,255,0.5);
+}
+
+input::placeholder {
+  color: #666;
+}
+
+.btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(90deg, #4da6ff, #FFD700, #4da6ff);
+  background-size: 200% 100%;
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  animation: shineBtn 3s linear infinite;
+  margin-top: 8px;
+}
+
+@keyframes shineBtn {
+ 0% { background-position: 0% 50%; }
+ 100% { background-position: 200% 50%; }
+}
+
+.btn:hover {
+  transform: scale(1.03);
+}
+
+.btn.back {
+  background: linear-gradient(90deg, #333, #555);
+  color: #FFD700;
+  animation: none;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+  font-size: 11px;
+}
+
+.success-msg {
+  background: #001f3f;
+  border: 2px solid #4da6ff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: #FFD700;
+}
+
+.voucher-code {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4da6ff;
+  letter-spacing: 2px;
+  margin: 15px 0;
+  padding: 12px;
+  background: #000;
+  border-radius: 8px;
+  border: 1px dashed #FFD700;
+}
+</style>
 </head>
 <body>
-  <div class="box">
-    <div class="top">
-      <div class="logo">MY</div>
-      <h1>Majestic WiFi</h1>
-      <p>Fast Internet Access</p>
+<div class="shine"></div>
+
+<div class="box">
+  <div class="logo">
+    <h1>📶 GOLDEN WIFI</h1>
+    <p>Pay & Connect - Internet ya Haraka</p>
+  </div>
+
+  <div class="status">
+    <div class="icon">📡</div>
+    <h3 id="statusText">Huna Data - Unganisha Kwanza</h3>
+    <small>Chagua package kulipia na M-Pesa</small>
+  </div>
+
+  <!-- PAGE 1: PACKAGES -->
+  <div id="pagePackages" class="page active">
+    <h3 style="color:#4da6ff; margin-bottom:15px; text-align:center;">CHAGUA PACKAGE YAKO</h3>
+    
+    <div class="package-grid">
+      <div class="package" onclick="selectPackage('1 Hour', 10)">
+        <h4>1 Hour</h4>
+        <div class="price">Tsh 10</div>
+        <div class="time">Dakika 60</div>
+      </div>
+      
+      <div class="package" onclick="selectPackage('3 Hours', 30)">
+        <h4>3 Hours</h4>
+        <div class="price">Tsh 30</div>
+        <div class="time">Masaa 3</div>
+      </div>
+      
+      <div class="package" onclick="selectPackage('5 Hours', 50)">
+        <h4>5 Hours</h4>
+        <div class="price">Tsh 50</div>
+        <div class="time">Mpaka Midnight</div>
+      </div>
+      
+      <div class="package gold" onclick="selectPackage('Daily', 100)">
+        <h4>Daily</h4>
+        <div class="price">Tsh 100</div>
+        <div class="time">Masaa 24</div>
+      </div>
+      
+      <div class="package gold" onclick="selectPackage('3 Days', 250)">
+        <h4>3 Days</h4>
+        <div class="price">Tsh 250</div>
+        <div class="time">Siku 3</div>
+      </div>
+      
+      <div class="package gold" onclick="selectPackage('7 Days', 500)">
+        <h4>7 Days</h4>
+        <div class="price">Tsh 500</div>
+        <div class="time">Wiki 1</div>
+      </div>
+      
+      <div class="package gold" onclick="selectPackage('15 Days', 1000)">
+        <h4>15 Days</h4>
+        <div class="price">Tsh 1000</div>
+        <div class="time">Nusu Mwezi</div>
+      </div>
+      
+      <div class="package gold" onclick="selectPackage('30 Days', 1800)">
+        <h4>30 Days</h4>
+        <div class="price">Tsh 1800</div>
+        <div class="time">Mwezi 1 Kamili</div>
+      </div>
     </div>
 
-    <div class="plans">
-      <h2>Chagua Package</h2>
+    <!-- WEKA PACKAGE ZAKO HAPA CHINI -->
+    <h3 style="color:#FFD700; margin:20px 0 10px; text-align:center; font-size:14px;">PACKAGE ZA MWENYE WIFI</h3>
+    <div class="package-grid">
+      <div class="package" onclick="selectPackage('Night 10PM-6AM', 50)">
+        <h4>Night</h4>
+        <div class="price">Tsh 50</div>
+        <div class="time">10PM-6AM</div>
+      </div>
       
-      <div class="plan">
-        <div>
-          <b>1 Hour</b>
-          <small>Speed: 5Mbps | Muda: Saa 1</small>
-        </div>
-        <button class="btn" onclick="lipa(50,'1Hour')">KES 50</button>
-      </div>
-
-      <div class="plan">
-        <div>
-          <b>1 Day</b>
-          <small>Speed: 10Mbps | Muda: Siku 1</small>
-        </div>
-        <button class="btn" onclick="lipa(100,'1Day')">KES 100</button>
-      </div>
-
-      <div class="plan">
-        <div>
-          <b>1 Week</b>
-          <small>Speed: 20Mbps | Muda: Wiki 1</small>
-        </div>
-        <button class="btn" onclick="lipa(500,'1Week')">KES 500</button>
-      </div>
-
-      <div class="plan">
-        <div>
-          <b>1 Month</b>
-          <small>Speed: 50Mbps | Muda: Mwezi 1</small>
-        </div>
-        <button class="btn" onclick="lipa(1500,'1Month')">KES 1500</button>
-      </div>
-
-      <div class="voucher">
-        <p>AU TUMIA VOUCHER</p>
-        <input type="text" placeholder="Weka code ya voucher">
-        <input type="password" placeholder="Password">
-        <button class="connect" onclick="ingia()">Connect Sasa</button>
+      <div class="package" onclick="selectPackage('Weekend', 300)">
+        <h4>Weekend</h4>
+        <div class="price">Tsh 300</div>
+        <div class="time">Ijumaa-Jumapili</div>
       </div>
     </div>
   </div>
 
-  <script>
-    function lipa(pesa,package){
-      let namba = prompt("Weka namba ya M-Pesa: 07xxxxxxxx");
-      if(namba && namba.length==10){
-        alert("Tuma KES "+pesa+" kwa "+namba+" - Package: "+package);
-        // Hapa ndio unaweka code yako ya M-Pesa API
-      }else{
-        alert("Namba si sahihi!");
-      }
-    }
+  <!-- PAGE 2: PAYMENT -->
+  <div id="pagePay" class="page">
+    <h3 style="color:#FFD700; text-align:center; margin-bottom:15px;" id="payTitle">Lipa Package</h3>
     
-    function ingia(){
-      alert("Ingiza code sawa ndio u-connect");
-      // Hapa ndio code ya ku-check voucher kwa database yako
+    <input type="tel" id="phone" placeholder="Weka namba ya M-Pesa: 07XXXXXXXX" maxlength="10">
+    
+    <button class="btn" onclick="payNow()">LIPA TSH <span id="payAmount">0</span> SASA</button>
+    <button class="btn back" onclick="showPage('pagePackages')">⬅ Rudi Nyuma</button>
+    
+    <div id="payStatus" style="margin-top:15px; display:none; padding:12px; border-radius:8px; text-align:center; font-size:13px;"></div>
+  </div>
+
+  <!-- PAGE 3: SUCCESS -->
+  <div id="pageSuccess" class="page">
+    <div class="success-msg">
+      <div style="font-size:50px; margin-bottom:10px;">✅</div>
+      <h3 style="color:#4da6ff; margin-bottom:10px;">Umeunganishwa!</h3>
+      <p>Voucher yako ni:</p>
+      <div class="voucher-code" id="voucherCode">GW-XXXX-XXXX</div>
+      <p style="color:#ccc; font-size:13px;">Weka code hii router / captive portal</p>
+      <p style="color:#FFD700; margin-top:10px;" id="expireText">Inaisha: ...</p>
+      <button class="btn" onclick="resetPortal()">Toka</button>
+    </div>
+  </div>
+
+  <div class="footer">© 2026 Golden WiFi | Powered by You</div>
+</div>
+
+<script>
+let selectedPackage = '';
+let selectedPrice = 0;
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function selectPackage(name, price) {
+  selectedPackage = name;
+  selectedPrice = price;
+  document.getElementById('payTitle').innerText = 'Lipa: ' + name;
+  document.getElementById('payAmount').innerText = price;
+  showPage('pagePay');
+}
+
+async function payNow() {
+  let phone = document.getElementById('phone').value;
+  let statusDiv = document.getElementById('payStatus');
+  
+  if(!phone.match(/^07[0-9]{8}$/)) {
+    showPayStatus('Weka namba sahihi: 0712345678', 'error');
+    return;
+  }
+  
+  let formattedPhone = '254' + phone.substring(1);
+  showPayStatus('Tunasubiri M-Pesa... Angalia simu yako', 'loading');
+  
+  // HAPA UNGANISHA NA STK PUSH YAKO YA VERCEL
+  try {
+    const res = await fetch('/api/stk', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({phone: formattedPhone, amount: selectedPrice, package: selectedPackage})
+    });
+    
+    const data = await res.json();
+    
+    if(data.ResponseCode === '0') {
+      showPayStatus('✅ Weka PIN ya M-Pesa. Tunathibitisha malipo...', 'success');
+      
+      // Subiri sekunde 8 kisha onyesha success - hapa unapaswa kuangalia callback
+      setTimeout(() => {
+        let code = 'GW-' + Math.random().toString(36).substr(2,4).toUpperCase() + '-' + Math.random().toString(36).substr(2,4).toUpperCase();
+        document.getElementById('voucherCode').innerText = code;
+        document.getElementById('expireText').innerText = 'Inaisha: ' + selectedPackage + ' kutoka sasa';
+        document.getElementById('statusText').innerText = 'Umeunganishwa - ' + selectedPackage;
+        showPage('pageSuccess');
+      }, 8000);
+      
+    } else {
+      showPayStatus('Kosa: ' + data.errorMessage, 'error');
     }
-  </script>
+  } catch(e) {
+    showPayStatus('Mtandao umekatika. Jaribu tena', 'error');
+  }
+}
+
+function showPayStatus(msg, type) {
+  let div = document.getElementById('payStatus');
+  div.style.display = 'block';
+  div.innerText = msg;
+  div.style.background = type === 'error' ? '#3d0000' : type === 'success' ? '#003d1a' : '#1a1a00';
+  div.style.border = '1px solid ' + (type === 'error' ? '#ff3333' : type === 'success' ? '#00ff66' : '#FFD700');
+}
+
+function resetPortal() {
+  document.getElementById('phone').value = '';
+  document.getElementById('payStatus').style.display = 'none';
+  document.getElementById('statusText').innerText = 'Huna Data - Unganisha Kwanza';
+  showPage('pagePackages');
+}
+</script>
 </body>
-</html>
+        </html>
