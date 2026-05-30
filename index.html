@@ -1,432 +1,203 @@
-<!DOCTYPE html>
-<html lang="sw">
+
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Golden WiFi - Pay & Connect</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='none' stroke='%23FFD700' stroke-width='8'/><path d='M50 25 Q70 40 50 55 Q30 70 50 85' fill='none' stroke='%23FFD700' stroke-width='6' stroke-linecap='round'/></svg>">
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
+  body { background: #000; color: #fff; font-family: Arial; text-align: center; padding: 20px; margin: 0; }
+  
+  /* Maandishi yakizunguka juu */
+  .marquee {
+    background: linear-gradient(90deg, #FFD700, #00C3FF);
+    color: #000;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  .marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll 15s linear infinite;
+  }
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
 
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #000 0%, #001f3f 50%, #000 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  color: #fff;
-}
-
-.shine {
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
-  animation: rotate 25s linear infinite;
-}
-
-@keyframes rotate {
- 100% { transform: rotate(360deg); }
-}
-
-.box {
-  background: rgba(0,0,0,0.85);
-  border: 3px solid #FFD700;
-  border-radius: 25px;
-  padding: 35px 25px;
-  width: 100%;
-  max-width: 450px;
-  box-shadow: 0 0 50px rgba(0,100,255,0.6), 0 0 30px rgba(255,215,0,0.4);
-  animation: glow 2.5s ease-in-out infinite alternate;
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes glow {
- 0% { box-shadow: 0 0 40px rgba(0,100,255,0.5), 0 0 20px rgba(255,215,0,0.3); }
- 100% { box-shadow: 0 0 70px rgba(0,150,255,0.8), 0 0 40px rgba(255,215,0,0.6); }
-}
-
-.logo {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.logo h1 {
-  color: #FFD700;
-  font-size: 32px;
-  text-shadow: 0 0 15px rgba(255,215,0,0.9);
-  margin-bottom: 5px;
-}
-
-.logo p {
-  color: #4da6ff;
-  font-size: 13px;
-}
-
-.status {
-  background: #001f3f;
-  border: 2px solid #FFD700;
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.status .icon {
-  font-size: 45px;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
- 0%, 100% { transform: scale(1); }
- 50% { transform: scale(1.1); }
-}
-
-.status h3 {
-  color: #FFD700;
-  margin-top: 8px;
-}
-
-.status small {
-  color: #ccc;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-  animation: fadeIn 0.4s;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.package-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.package {
-  background: linear-gradient(145deg, #001f3f, #000);
-  border: 2px solid #4da6ff;
-  border-radius: 15px;
-  padding: 18px 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.package:hover {
-  border-color: #FFD700;
-  transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(255,215,0,0.5);
-}
-
-.package.gold {
-  border-color: #FFD700;
-  background: linear-gradient(145deg, #1a1a00, #000);
-}
-
-.package h4 {
-  color: #FFD700;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.package .price {
-  color: #4da6ff;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.package .time {
-  color: #aaa;
-  font-size: 11px;
-  margin-top: 3px;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  background: #111;
-  border: 2px solid #333;
-  border-radius: 10px;
-  color: #FFD700;
-  font-size: 15px;
-  outline: none;
-}
-
-input:focus {
-  border-color: #4da6ff;
-  box-shadow: 0 0 12px rgba(77,166,255,0.5);
-}
-
-input::placeholder {
-  color: #666;
-}
-
-.btn {
-  width: 100%;
-  padding: 15px;
-  background: linear-gradient(90deg, #4da6ff, #FFD700, #4da6ff);
-  background-size: 200% 100%;
-  border: none;
-  border-radius: 12px;
-  color: #000;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-  animation: shineBtn 3s linear infinite;
-  margin-top: 8px;
-}
-
-@keyframes shineBtn {
- 0% { background-position: 0% 50%; }
- 100% { background-position: 200% 50%; }
-}
-
-.btn:hover {
-  transform: scale(1.03);
-}
-
-.btn.back {
-  background: linear-gradient(90deg, #333, #555);
-  color: #FFD700;
-  animation: none;
-}
-
-.footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #555;
-  font-size: 11px;
-}
-
-.success-msg {
-  background: #001f3f;
-  border: 2px solid #4da6ff;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  color: #FFD700;
-}
-
-.voucher-code {
-  font-size: 24px;
-  font-weight: bold;
-  color: #4da6ff;
-  letter-spacing: 2px;
-  margin: 15px 0;
-  padding: 12px;
-  background: #000;
-  border-radius: 8px;
-  border: 1px dashed #FFD700;
-}
+  .card { 
+    background: #111; 
+    border: 2px solid #FFD700; 
+    border-radius: 15px; 
+    padding: 20px; 
+    max-width: 400px; 
+    margin: 70px auto 20px; 
+  }
+  
+  input { 
+    width: 90%; 
+    padding: 12px; 
+    margin: 10px 0; 
+    border-radius: 8px; 
+    border: 1px solid #333; 
+    background: #222; 
+    color: #FFD700; 
+    font-size: 16px; 
+  }
+  
+  /* Package buttons */
+  .packages {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 15px 0;
+  }
+  .pkg-btn {
+    background: #222;
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .pkg-btn.active {
+    background: linear-gradient(90deg, #00C3FF, #FFD700);
+    color: #000;
+  }
+  
+  .pay-btn { 
+    width: 95%; 
+    padding: 14px; 
+    margin: 15px 0 8px; 
+    border: none; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    font-size: 16px; 
+    cursor: pointer;
+    background: linear-gradient(90deg, #00C3FF, #FFD700); 
+    color: #000; 
+  }
+  
+  .error { background: #ff0000; color: #fff; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
+  .success { background: #00ff00; color: #000; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>
-<div class="shine"></div>
 
-<div class="box">
-  <div class="logo">
-    <h1>📶 GOLDEN WIFI</h1>
-    <p>Pay & Connect - Internet ya Haraka</p>
+<!-- Maandishi yakizunguka juu -->
+<div class="marquee">
+  <span>BETTER WIFI BETTER FOR LIFE WE GROW TOGETHER • BETTER WIFI BETTER FOR LIFE WE GROW TOGETHER • </span>
+</div>
+
+<div class="card">
+  <h2>📶 GOLDEN WiFi</h2>
+  <p>Pay & Connect - Fast Internet</p>
+  
+  <h3>Select Package:</h3>
+  <div class="packages">
+    <button class="pkg-btn active" data-amount="20" data-name="1 Hour">1 Hour<br>KES 20</button>
+    <button class="pkg-btn" data-amount="50" data-name="3 Days">3 Days<br>KES 50</button>
+    <button class="pkg-btn" data-amount="100" data-name="7 Days">7 Days<br>KES 100</button>
+    <button class="pkg-btn" data-amount="200" data-name="30 Days">30 Days<br>KES 200</button>
   </div>
-
-  <div class="status">
-    <div class="icon">📡</div>
-    <h3 id="statusText">Huna Data - Unganisha Kwanza</h3>
-    <small>Chagua package kulipia na M-Pesa</small>
-  </div>
-
-  <!-- PAGE 1: PACKAGES -->
-  <div id="pagePackages" class="page active">
-    <h3 style="color:#4da6ff; margin-bottom:15px; text-align:center;">CHAGUA PACKAGE YAKO</h3>
-    
-    <div class="package-grid">
-      <div class="package" onclick="selectPackage('1 Hour', 10)">
-        <h4>1 Hour</h4>
-        <div class="price">Tsh 10</div>
-        <div class="time">Dakika 60</div>
-      </div>
-      
-      <div class="package" onclick="selectPackage('3 Hours', 30)">
-        <h4>3 Hours</h4>
-        <div class="price">Tsh 30</div>
-        <div class="time">Masaa 3</div>
-      </div>
-      
-      <div class="package" onclick="selectPackage('5 Hours', 50)">
-        <h4>5 Hours</h4>
-        <div class="price">Tsh 50</div>
-        <div class="time">Mpaka Midnight</div>
-      </div>
-      
-      <div class="package gold" onclick="selectPackage('Daily', 100)">
-        <h4>Daily</h4>
-        <div class="price">Tsh 100</div>
-        <div class="time">Masaa 24</div>
-      </div>
-      
-      <div class="package gold" onclick="selectPackage('3 Days', 250)">
-        <h4>3 Days</h4>
-        <div class="price">Tsh 250</div>
-        <div class="time">Siku 3</div>
-      </div>
-      
-      <div class="package gold" onclick="selectPackage('7 Days', 500)">
-        <h4>7 Days</h4>
-        <div class="price">Tsh 500</div>
-        <div class="time">Wiki 1</div>
-      </div>
-      
-      <div class="package gold" onclick="selectPackage('15 Days', 1000)">
-        <h4>15 Days</h4>
-        <div class="price">Tsh 1000</div>
-        <div class="time">Nusu Mwezi</div>
-      </div>
-      
-      <div class="package gold" onclick="selectPackage('30 Days', 1800)">
-        <h4>30 Days</h4>
-        <div class="price">Tsh 1800</div>
-        <div class="time">Mwezi 1 Kamili</div>
-      </div>
-    </div>
-
-    <!-- WEKA PACKAGE ZAKO HAPA CHINI -->
-    <h3 style="color:#FFD700; margin:20px 0 10px; text-align:center; font-size:14px;">PACKAGE ZA MWENYE WIFI</h3>
-    <div class="package-grid">
-      <div class="package" onclick="selectPackage('Night 10PM-6AM', 50)">
-        <h4>Night</h4>
-        <div class="price">Tsh 50</div>
-        <div class="time">10PM-6AM</div>
-      </div>
-      
-      <div class="package" onclick="selectPackage('Weekend', 300)">
-        <h4>Weekend</h4>
-        <div class="price">Tsh 300</div>
-        <div class="time">Ijumaa-Jumapili</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE 2: PAYMENT -->
-  <div id="pagePay" class="page">
-    <h3 style="color:#FFD700; text-align:center; margin-bottom:15px;" id="payTitle">Lipa Package</h3>
-    
-    <input type="tel" id="phone" placeholder="Weka namba ya M-Pesa: 07XXXXXXXX" maxlength="10">
-    
-    <button class="btn" onclick="payNow()">LIPA TSH <span id="payAmount">0</span> SASA</button>
-    <button class="btn back" onclick="showPage('pagePackages')">⬅ Rudi Nyuma</button>
-    
-    <div id="payStatus" style="margin-top:15px; display:none; padding:12px; border-radius:8px; text-align:center; font-size:13px;"></div>
-  </div>
-
-  <!-- PAGE 3: SUCCESS -->
-  <div id="pageSuccess" class="page">
-    <div class="success-msg">
-      <div style="font-size:50px; margin-bottom:10px;">✅</div>
-      <h3 style="color:#4da6ff; margin-bottom:10px;">Umeunganishwa!</h3>
-      <p>Voucher yako ni:</p>
-      <div class="voucher-code" id="voucherCode">GW-XXXX-XXXX</div>
-      <p style="color:#ccc; font-size:13px;">Weka code hii router / captive portal</p>
-      <p style="color:#FFD700; margin-top:10px;" id="expireText">Inaisha: ...</p>
-      <button class="btn" onclick="resetPortal()">Toka</button>
-    </div>
-  </div>
-
-  <div class="footer">© 2026 Golden WiFi | Powered by You</div>
+  
+  <input type="tel" id="phone" placeholder="Enter M-Pesa Number: 07XXXXXXXX" maxlength="10">
+  
+  <button class="pay-btn" id="payBtn">PAY KES 50 NOW</button>
+  
+  <div id="errorBox" class="error"></div>
+  <div id="successBox" class="success"></div>
 </div>
 
 <script>
-let selectedPackage = '';
-let selectedPrice = 0;
+let selectedAmount = 50;
+let selectedPackage = "3 Days";
 
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+const pkgButtons = document.querySelectorAll('.pkg-btn');
+const payBtn = document.getElementById('payBtn');
+
+pkgButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    pkgButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedAmount = btn.dataset.amount;
+    selectedPackage = btn.dataset.name;
+    payBtn.innerText = `PAY KES ${selectedAmount} NOW`;
+  });
+});
+
+function showError(msg) {
+  document.getElementById('errorBox').innerText = msg;
+  document.getElementById('errorBox').style.display = 'block';
+  document.getElementById('successBox').style.display = 'none';
+  setTimeout(() => { document.getElementById('errorBox').style.display = 'none'; }, 4000);
 }
 
-function selectPackage(name, price) {
-  selectedPackage = name;
-  selectedPrice = price;
-  document.getElementById('payTitle').innerText = 'Lipa: ' + name;
-  document.getElementById('payAmount').innerText = price;
-  showPage('pagePay');
+function showSuccess(msg) {
+  document.getElementById('successBox').innerText = msg;
+  document.getElementById('successBox').style.display = 'block';
+  document.getElementById('errorBox').style.display = 'none';
+}
+
+function validatePhone(phone) {
+  phone = phone.replace(/\s/g, '');
+  return /^07\d{8}$/.test(phone);
+}
+
+function formatPhone(phone) {
+  return phone.replace(/^0/, '254');
 }
 
 async function payNow() {
-  let phone = document.getElementById('phone').value;
-  let statusDiv = document.getElementById('payStatus');
+  let phone = document.getElementById('phone').value.trim();
   
-  if(!phone.match(/^07[0-9]{8}$/)) {
-    showPayStatus('Weka namba sahihi: 0712345678', 'error');
+  if (phone === '') {
+    showError('Error: Please enter your M-Pesa number');
     return;
   }
   
-  let formattedPhone = '254' + phone.substring(1);
-  showPayStatus('Tunasubiri M-Pesa... Angalia simu yako', 'loading');
+  if (!validatePhone(phone)) {
+    showError('Error: Enter valid M-Pesa number. Format: 07XXXXXXXX');
+    return;
+  }
   
-  // HAPA UNGANISHA NA STK PUSH YAKO YA VERCEL
+  let formattedPhone = formatPhone(phone);
+  showSuccess(`Sending STK Push to ${phone} for ${selectedPackage}...`);
+  
   try {
     const res = await fetch('/api/stk', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({phone: formattedPhone, amount: selectedPrice, package: selectedPackage})
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        phone: formattedPhone, 
+        amount: selectedAmount,
+        package: selectedPackage
+      })
     });
     
     const data = await res.json();
     
-    if(data.ResponseCode === '0') {
-      showPayStatus('✅ Weka PIN ya M-Pesa. Tunathibitisha malipo...', 'success');
-      
-      // Subiri sekunde 8 kisha onyesha success - hapa unapaswa kuangalia callback
-      setTimeout(() => {
-        let code = 'GW-' + Math.random().toString(36).substr(2,4).toUpperCase() + '-' + Math.random().toString(36).substr(2,4).toUpperCase();
-        document.getElementById('voucherCode').innerText = code;
-        document.getElementById('expireText').innerText = 'Inaisha: ' + selectedPackage + ' kutoka sasa';
-        document.getElementById('statusText').innerText = 'Umeunganishwa - ' + selectedPackage;
-        showPage('pageSuccess');
-      }, 8000);
-      
+    if (data.ResponseCode === '0') {
+      showSuccess('STK Push sent! Check your phone and enter M-Pesa PIN');
     } else {
-      showPayStatus('Kosa: ' + data.errorMessage, 'error');
+      showError('Error: ' + data.errorMessage);
     }
-  } catch(e) {
-    showPayStatus('Mtandao umekatika. Jaribu tena', 'error');
+    
+  } catch (err) {
+    showError('Error: Failed to connect. Try again');
   }
 }
 
-function showPayStatus(msg, type) {
-  let div = document.getElementById('payStatus');
-  div.style.display = 'block';
-  div.innerText = msg;
-  div.style.background = type === 'error' ? '#3d0000' : type === 'success' ? '#003d1a' : '#1a1a00';
-  div.style.border = '1px solid ' + (type === 'error' ? '#ff3333' : type === 'success' ? '#00ff66' : '#FFD700');
-}
-
-function resetPortal() {
-  document.getElementById('phone').value = '';
-  document.getElementById('payStatus').style.display = 'none';
-  document.getElementById('statusText').innerText = 'Huna Data - Unganisha Kwanza';
-  showPage('pagePackages');
-}
+payBtn.addEventListener('click', payNow);
 </script>
 </body>
-        </html>
+</html>
